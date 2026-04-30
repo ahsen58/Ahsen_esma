@@ -27,7 +27,7 @@ class CitiesDBQueries:
         self.connection.commit()
         print(f"Başarılı: {city.country_id} {city.name} ({city.code}) City tablosuna eklendi!")
 
-    def get_cities_from_country_id(self,country_id):
+    def get_cities_by_country(self, country_id):
         query = "SELECT * FROM City where country_id = ?"
         self.cursor.execute(query, (country_id,))
         rows = self.cursor.fetchall()
