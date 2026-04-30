@@ -1,7 +1,7 @@
 import sqlite3
 
 
-class DBQueries:
+class CountryDBQueries:
     def __init__(self, db_name="nufus_takip.db"):
         self.connection = sqlite3.connect(db_name)
         self.cursor = self.connection.cursor()
@@ -25,6 +25,16 @@ class DBQueries:
         self.cursor.execute(query, (name, code))
         self.connection.commit()  # Veriyi kalıcı olarak kaydeder
         print(f"Başarılı: {name} ({code}) tablolaya eklendi!")
+
+    def get_all_countries(self):
+        query = "SELECT * FROM Country"
+        self.cursor.execute(query)
+
+        # fetchall() tablodaki tüm satırları bir liste olarak alır
+        # Örnek Çıktı: [(1, 'Türkiye', 'TR'), (2, 'Almanya', 'DE')]
+        countries = self.cursor.fetchall()
+
+        return countries
 
     def close_connection(self):
         self.connection.close()

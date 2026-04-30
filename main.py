@@ -1,9 +1,16 @@
 
 import sqlite3
 
-from database.DBQueries import DBQueries
+from database.CitiesDBQueries import CitiesDBQueries
+from database.CountryDBQueries import CountryDBQueries
+from database.DistrictDBQueries import DistrictDBQueries
+from database.PopulationDBQueries import PopulationDBQueries
 
 if __name__ == "__main__":
-    db = DBQueries()
-    db.insert_country("Türkiye","90")
+    db=PopulationDBQueries()
+    db.create_population_table()
+
+
+
+
     db.close_connection()
