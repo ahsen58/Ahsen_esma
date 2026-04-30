@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 
 from gui.Population import PopulationGUI
+from gui.StatisticsGUI import StatisticsGUI
 
 
 # Kendi dosyalarından gerekli sınıfları import etmeyi unutma
@@ -27,7 +28,7 @@ class MainMenu:
         btn_ekle.pack(pady=10, fill='x', padx=50, ipady=5)
 
         # 2. BUTON: Şimdilik boş duran 2. buton (İleride istatistik veya listeleme ekranı yaparsın)
-        btn_diger = ttk.Button(self.root, text="2. İstatistikler (Yakında)", command=self.yakinda_mesaji)
+        btn_diger = ttk.Button(self.root, text="2. İstatistikler", command=self.istatistik_ekrani_ac)
         btn_diger.pack(pady=10, fill='x', padx=50, ipady=5)
 
     def nufus_ekrani_ac(self):
@@ -38,6 +39,8 @@ class MainMenu:
         # Daha önce yazdığımız PopulationGUI sınıfını bu yeni pencerenin içine gömüyoruz
         app = PopulationGUI(yeni_pencere)
 
-    def yakinda_mesaji(self):
-        # İkinci buton tıklandığında şimdilik sadece bir bilgi mesajı versin
-        messagebox.showinfo("Bilgi", "Bu ekran henüz yapım aşamasındadır.")
+    def istatistik_ekrani_ac(self):
+        # Yeni bir alt pencere açıyoruz
+        yeni_pencere = tk.Toplevel(self.root)
+        # StatisticsGUI sınıfımızı bu pencereye gömüyoruz
+        app = StatisticsGUI(yeni_pencere)

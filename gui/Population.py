@@ -65,36 +65,28 @@ class PopulationGUI:
         btn_save.grid(row=6, column=0, columnspan=2, pady=20)
 
     def veriyi_kaydet(self):
+        # Ortak bileşenden verileri çekiyoruz!
+        selected_ids = self.location_selector.get_selected_ids()
+
+        if selected_ids is None:
+            messagebox.showerror("Hata", "Lütfen Ülke, Şehir ve İlçe seçimlerini tam yapın.")
+            return
+
+        # Eğer None dönmediyse, ID'leri parçalıyoruz (tuple unpacking)
+        c_id, city_id, dist_id = selected_ids
+
         try:
-            # Kutulardaki verileri alıyoruz ve sözlüklerden ID'lerini çözüyoruz
-            c_id = self.country_map[self.combo_country.get()]
-            city_id = self.city_map[self.combo_city.get()]
-            dist_id = self.district_map[self.combo_district.get()]
             age = int(self.entry_age.get())
             gender = self.combo_gender.get()
-            is_working = self.var_working.get()  # 0 veya 1 döner
-            is_student = self.var_student.get()  # 0 veya 1 döner
+            is_working = self.var_working.get()
+            is_student = self.var_student.get()
 
             if not gender:
-                raise ValueError("Cinsiyet seçilmedi!")
+                raise ValueError
 
-            # Veritabanına gönderiyoruz
             self.pop_db.insert_population(c_id, city_id, dist_id, age, gender, is_working, is_student)
-
-            # Kullanıcıya bilgi veriyoruz
             messagebox.showinfo("Başarılı", "Kişi sisteme başarıyla eklendi!")
-
-            # Formu temizliyoruz (Yaş kutusunu)
             self.entry_age.delete(0, tk.END)
 
-        except KeyError:
-            messagebox.showerror("Hata", "Lütfen Ülke, Şehir ve İlçe seçimlerini tam yapın.")
         except ValueError:
-            messagebox.showerror("Hata", "Yaş kısmına sadece sayı girin ve tüm alanları doldurun.")
-
-
-# --- UYGULAMAYI ÇALIŞTIRMA ---
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = PopulationGUI(root)
-    root.mainloop()
+            messagebox.showerror("Hata", "Lütfen yaş kısmına sadece sayı girin ve boş alan bırakmayın.")
