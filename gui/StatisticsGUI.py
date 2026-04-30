@@ -57,9 +57,6 @@ class StatisticsGUI:
         self.lbl_erkek = ttk.Label(self.result_frame, text="Erkek Oranı: -", font=("Helvetica", 11))
         self.lbl_erkek.pack(pady=5)
 
-        self.lbl_diger = ttk.Label(self.result_frame, text="Diğer Oranı: -", font=("Helvetica", 11))
-        self.lbl_diger.pack(pady=5)
-
     def istatistik_hesapla(self):
         # Ortak bileşenden verileri çekiyoruz!
         selected_ids = self.location_selector.get_selected_ids()
@@ -79,7 +76,6 @@ class StatisticsGUI:
             self.lbl_toplam.config(text="Toplam Nüfus: 0")
             self.lbl_kadin.config(text="Kadın Oranı: %0")
             self.lbl_erkek.config(text="Erkek Oranı: %0")
-            self.lbl_diger.config(text="Diğer Oranı: %0")
             return
 
         # VERİYİ İSTATİSTİK UZMANI SINIFIMIZA GÖNDERİYORUZ
