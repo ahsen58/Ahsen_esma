@@ -1,5 +1,8 @@
 import sqlite3
 
+from dto.DistrictDTO import DistrictDTO
+
+
 class DistrictDBQueries:
     def __init__(self, db_name="nufus_takip.db"):
         # Aynı veritabanı dosyasına bağlanıyoruz ki hepsi bir arada dursun
@@ -20,11 +23,11 @@ class DistrictDBQueries:
         self.connection.commit()
         print("District tablosu başarıyla oluşturuldu.")
 
-    def insert_district(self, city_id, name, code):
+    def insert_district(self, district:DistrictDTO):
         query = "INSERT INTO District (city_id, name, code) VALUES (?, ?, ?)"
-        self.cursor.execute(query, (city_id, name, code))
+        self.cursor.execute(query, (district.city_id, district.name,district.code))
         self.connection.commit()
-        print(f"Başarılı: Şehir ID {city_id} olan {name} ({code}) District tablosuna eklendi!")
+        print(f"Başarılı: Şehir ID {district.city_id} olan {district.name} ({district.code}) District tablosuna eklendi!")
 
     def get_all_districts(self):
         query = "SELECT * FROM District"
@@ -35,7 +38,15 @@ class DistrictDBQueries:
         # Sadece belirli bir şehre ait ilçeleri çekmek için metod
         query = "SELECT * FROM District WHERE city_id = ?"
         self.cursor.execute(query, (city_id,))
-        return self.cursor.fetchall()
+        rows = self.cursor.fetchall()  # Ham veriyi çekiyoruz
 
+        district_dto_list = []  # DTO'ları koyacağımız boş liste
+
+        # AYNI FOR DÖNGÜSÜ BURADA DA VAR
+        for row in rows:
+            dto = DistrictDTO(district_id=row[0], city_id=row[1], name=row[2], code=row[3])
+            district_dto_list.append(dto)
+
+        return district_dto_list  # Seçilen şehre ait ilçelerin DTO listesi dönüyor
     def close_connection(self):
         self.connection.close()
