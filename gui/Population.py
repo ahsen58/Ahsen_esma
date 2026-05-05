@@ -8,51 +8,39 @@ from database.PopulationDBQueries import PopulationDBQueries
 from gui.LocationSelectorFrame import LocationSelectorFrame
 
 
-# Sınıflarını import et (Kendi dosya yollarına göre düzenle)
-# from db.DBQueries import DBQueries
-# from db.CitiesDBQueries import CitiesDBQueries
-# from db.DistrictDBQueries import DistrictDBQueries
-# from db.PopulationDBQueries import PopulationDBQueries
+
 
 class PopulationGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Nüfus Kayıt Sistemi")
         self.root.geometry("400x350")
-
-        # Veritabanı bağlantılarını başlatıyoruz
-        # (Sınıf adlarını kendi koduna göre ayarlarsın)
         self.country_db = CountryDBQueries()
         self.city_db = CitiesDBQueries()
         self.district_db = DistrictDBQueries()
         self.pop_db = PopulationDBQueries()
-
-        # İsimlerden ID'leri bulmak için hafıza sözlükleri
         self.country_map = {}
         self.city_map = {}
         self.district_map = {}
-
         self.arayuzu_olustur()
 
     def arayuzu_olustur(self):
-        # 1. ORTAK LOKASYON BİLEŞENİNİ ÇAĞIRIP EKRANA YERLEŞTİRİYORUZ
         self.location_selector = LocationSelectorFrame(
             self.root, self.country_db, self.city_db, self.district_db
         )
-        # Bu paneli en üste (row=0) yerleştiriyoruz
         self.location_selector.grid(row=0, column=0, columnspan=2, pady=10, padx=10)
 
-        # --- YAŞ ---
+
         ttk.Label(self.root, text="Yaş:").grid(row=3, column=0, padx=10, pady=10, sticky="w")
         self.entry_age = ttk.Entry(self.root, width=28)
         self.entry_age.grid(row=3, column=1, padx=10, pady=10)
 
-        # --- CİNSİYET ---
+
         ttk.Label(self.root, text="Cinsiyet:").grid(row=4, column=0, padx=10, pady=10, sticky="w")
         self.combo_gender = ttk.Combobox(self.root, values=["Kadın", "Erkek"], state="readonly", width=25)
         self.combo_gender.grid(row=4, column=1, padx=10, pady=10)
 
-        # --- ÇALIŞAN / ÖĞRENCİ (Checkbox) ---
+
         self.var_working = tk.IntVar()
         self.var_student = tk.IntVar()
 
@@ -60,19 +48,17 @@ class PopulationGUI:
         ttk.Checkbutton(self.root, text="Öğrenci", variable=self.var_student).grid(row=5, column=1, padx=10, pady=5,
                                                                                    sticky="w")
 
-        # --- KAYDET BUTONU ---
+
         btn_save = ttk.Button(self.root, text="Nüfusa Ekle", command=self.veriyi_kaydet)
         btn_save.grid(row=6, column=0, columnspan=2, pady=20)
 
     def veriyi_kaydet(self):
-        # Ortak bileşenden verileri çekiyoruz!
         selected_ids = self.location_selector.get_selected_ids()
 
         if selected_ids is None:
             messagebox.showerror("Hata", "Lütfen Ülke, Şehir ve İlçe seçimlerini tam yapın.")
             return
 
-        # Eğer None dönmediyse, ID'leri parçalıyoruz (tuple unpacking)
         c_id, city_id, dist_id = selected_ids
 
         try:

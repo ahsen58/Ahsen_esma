@@ -9,8 +9,6 @@ class PopulationDBQueries:
         self.cursor = self.connection.cursor()
 
     def create_population_table(self):
-        # country, city ve district id'lerini Foreign Key (Yabancı Anahtar) mantığıyla tutuyoruz
-        # is_working ve is_student için INTEGER kullanıyoruz (1 = Evet, 0 = Hayır)
         query = """
         CREATE TABLE IF NOT EXISTS Population (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -42,15 +40,12 @@ class PopulationDBQueries:
         return self.cursor.fetchall()
 
     def get_population_by_district(self, district_id):
-        # Sadece seçili ilçedeki insanları getiriyoruz
         query = "SELECT * FROM Population WHERE district_id = ?"
         self.cursor.execute(query, (district_id,))
         rows = self.cursor.fetchall()
 
         pop_dto_list = []
         for row in rows:
-            # row[0]=id, row[1]=country_id, row[2]=city_id, row[3]=district_id,
-            # row[4]=age, row[5]=gender, row[6]=is_working, row[7]=is_student
             dto = PopulationDTO(pop_id=row[0], country_id=row[1], city_id=row[2],
                                 district_id=row[3], age=row[4], gender=row[5],
                                 is_working=row[6], is_student=row[7])

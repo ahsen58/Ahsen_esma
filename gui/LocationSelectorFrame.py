@@ -3,7 +3,6 @@ from tkinter import ttk
 
 
 class LocationSelectorFrame(ttk.Frame):
-    # parent: Bu çerçevenin hangi ekrana yerleşeceğini belirtir
     def __init__(self, parent, country_db, city_db, district_db, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
 
@@ -19,7 +18,6 @@ class LocationSelectorFrame(ttk.Frame):
         self.ulkeleri_yukle()
 
     def arayuzu_olustur(self):
-        # Elemanları root'a değil, bu sınıfın kendisine (self) ekliyoruz
         ttk.Label(self, text="Ülke:").grid(row=0, column=0, padx=5, pady=5, sticky="w")
         self.combo_country = ttk.Combobox(self, state="readonly", width=25)
         self.combo_country.grid(row=0, column=1, padx=5, pady=5)
@@ -57,7 +55,6 @@ class LocationSelectorFrame(ttk.Frame):
         self.combo_district['values'] = list(self.district_map.keys())
         self.combo_district.set('')
 
-    # Dışarıdan bu çerçevenin içindeki seçilmiş ID'leri almak için bir metod yazıyoruz
     def get_selected_ids(self):
         try:
             c_id = self.country_map[self.combo_country.get()]
@@ -65,4 +62,4 @@ class LocationSelectorFrame(ttk.Frame):
             dist_id = self.district_map[self.combo_district.get()]
             return c_id, city_id, dist_id
         except KeyError:
-            return None  # Eğer hepsi seçilmediyse None döndür
+            return None

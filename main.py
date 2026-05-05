@@ -12,4 +12,3 @@ if __name__ == "__main__":
 
     # Programı sürekli açık tutan ana döngü
     ana_pencere.mainloop()
-  

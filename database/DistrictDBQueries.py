@@ -5,12 +5,10 @@ from dto.DistrictDTO import DistrictDTO
 
 class DistrictDBQueries:
     def __init__(self, db_name="nufus_takip.db"):
-        # Aynı veritabanı dosyasına bağlanıyoruz ki hepsi bir arada dursun
         self.connection = sqlite3.connect(db_name)
         self.cursor = self.connection.cursor()
 
     def create_district_table(self):
-        # city_id kolonunu ekleyerek ilçeyi şehre bağlıyoruz
         query = """
         CREATE TABLE IF NOT EXISTS District (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -35,18 +33,15 @@ class DistrictDBQueries:
         return self.cursor.fetchall()
 
     def get_districts_by_city(self, city_id):
-        # Sadece belirli bir şehre ait ilçeleri çekmek için metod
         query = "SELECT * FROM District WHERE city_id = ?"
         self.cursor.execute(query, (city_id,))
-        rows = self.cursor.fetchall()  # Ham veriyi çekiyoruz
+        rows = self.cursor.fetchall()
 
-        district_dto_list = []  # DTO'ları koyacağımız boş liste
-
-        # AYNI FOR DÖNGÜSÜ BURADA DA VAR
+        district_dto_list = []
         for row in rows:
             dto = DistrictDTO(district_id=row[0], city_id=row[1], name=row[2], code=row[3])
             district_dto_list.append(dto)
 
-        return district_dto_list  # Seçilen şehre ait ilçelerin DTO listesi dönüyor
+        return district_dto_list
     def close_connection(self):
         self.connection.close()
